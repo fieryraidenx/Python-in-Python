@@ -1,0 +1,2 @@
+var = "samarth"
+var = ["kaif"]
