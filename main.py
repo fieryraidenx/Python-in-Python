@@ -1,4 +1,5 @@
 from os import system, name
+import os
 
 
 def clean_word(x):
@@ -11,10 +12,22 @@ def clear():
     # for windows 
     if name == 'nt': 
         _ = system('cls') 
+        console()
   
     # for mac and linux(here, os.name is 'posix') 
     else: 
-        _ = system('clear') 
+        _ = system('clear')
+        console()
+
+def exit(): 
+  #Found this on the web, not sure exactly what it is doing, but I am importing OS, so i can clear the console when the user types in clear  
+    # for windows 
+    if name == 'nt': 
+        _ = system('cls') 
+  
+    # for mac and linux(here, os.name is 'posix') 
+    else: 
+        _ = system('clear')
 
 
 def print_list(x):
@@ -43,6 +56,13 @@ def print_list(x):
 		print("FileNotFoundError: List was not found")
 		console()
 
+def delete_file(x):
+  try:
+    os.remove(x)
+    console()
+  except FileNotFoundError:
+    print("FileNotFoundError: That variable does not exist")
+    console()
 
 def print_string(x):
   #This function prints a certain variable that gets asked by the user
@@ -98,27 +118,40 @@ def create_string(varname):
 
 def console():
   '''This is the start of the terminal. This is where the code is led back to after every interaction with the terminal.'''
-  write = input("\n>>> ")
-  return print_to_console(write)
+  try:
+    write = input("\n>>> ")
+    return print_to_console(write)
+  except KeyboardInterrupt:
+    print("\nKeyboardInterrupt: No function was sent")
+    console()
 
 
 def print_to_console(x):
   '''This is the main function, the will be hadling all the instructions given to the terminal'''
   check = x.split(" ")
-  if "print" in check[0]:
+  if "print" == check[0]:
+    del check[0]
+    var = " ".join(check)
+    print(var)
+    console()
+  elif "printvar" == check[0]:
     print_var(check)
     console()
 #This function is really stright forward. Just type helpin the console to get a gauge of everything you can do in this program
   elif "help" in check[0]:
-    print("Here are the list of functions available right now: \nprint ______\nhelp\nlist (insert name)= ______\nstring (insert name)= ______\nclear")
+    print("Here are the list of functions available right now: \nprint ________\nlist ________= ______\nstring _________= ______\nprint var _________\nclear\nhelp\ndelete _______")
     console()
 #This is the clear function mentioned above.
-  elif check[0].lower() == "clear":
+  elif check[0] == "clear":
     clear()
-  elif check[0].lower() == "string":
+  elif check[0] == "string":
     create_string(check)
-  elif check[0].lower() == "list":
+  elif check[0] == "list":
     create_list(check)
+  elif check[0] == "delete":
+    delete_file(check[1])
+  elif check[0] == "exit":
+    exit()
   else:
     print("FunctionError: Type help to find typeable functions")
     console()

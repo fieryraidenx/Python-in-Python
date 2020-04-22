@@ -1,2 +1,0 @@
-var = "samarth"
-var = ["kaif"]
